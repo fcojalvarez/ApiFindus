@@ -15,6 +15,7 @@ router.route('/login')
             let payload = {
                 id: auth.user.uid,
                 profile: userDB.profile,
+                name: userDB.name,
                 email: userDB.email
             };
             let token = jwt.sign(payload, config.jwtKey)

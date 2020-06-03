@@ -28,7 +28,7 @@ router.route('/users')
             let userDB = {
                 name: req.body.name,
                 surname: req.body.surname,
-                email: req.email,
+                email: req.body.email,
                 profile: req.body.profile,
                 _id: auth.user.uid,
             };
@@ -96,6 +96,7 @@ router.route('/users/:id')
                 res.status(404).json({ 'message': 'El elemento que intentas eliminar no existe' })
                 return
             }
+
             user.delete()
 
             res.status(204).json({ 'message': 'El usuario se ha eliminado correctamente.' })
