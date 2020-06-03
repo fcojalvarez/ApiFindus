@@ -16,8 +16,10 @@ app.use(bearerToken())
 
 // Traemos las rutas necesarias
 const usersRoute = require('./routes/users')
+const LoginRoute = require('./routes/auth')
     // Enganchamos la ruta
 app.use(usersRoute)
+app.use(LoginRoute)
 
 app.get("/", (req, res) => {
     res.send('Hola mundo')
