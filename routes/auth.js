@@ -26,8 +26,8 @@ router.route('/login')
             }
             res.json({ 'token': token })
         } catch (e) {
-            console.error(e)
             res.status(401).json({ message: e.message });
+            return
         }
     })
 

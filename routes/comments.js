@@ -64,7 +64,7 @@ router.route('/comments/:id')
                 votes: req.body.votes
             }
 
-            let updateComment = await Comment.findOneAndUpdate(searchId, commentUpdated, { new: true })
+            let updateComment = await Comment.findByIdAndUpdate(searchId, commentUpdated)
 
             if (!updateComment) {
                 res.status(404).json({ 'message': 'El elemento que intentas editar no existe' })
