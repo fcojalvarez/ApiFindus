@@ -10,7 +10,7 @@ const mustAuth = require('../middlewares/mustAuth')
 app.use(json());
 app.use(bearerToken());
 
-router.route('/comments')
+router.route('/:id/comments')
     .get(async(req, res) => {
         let commentsList = await Comment.find().exec();
 
@@ -19,13 +19,14 @@ router.route('/comments')
     .post(mustAuth(), async(req, res) => {
         try {
             let commentDB = {
-                title: req.body.title,
-                body: req.body.body,
-                votes: req.body.votes
-            }
-
-            let newComment = await new Comment(commentDB).save()
-            let commentJSON = newComment.toJSON()
+                    body: req.body.body,
+                    userCreate: req.body.userCreate,
+                    smartphoneID: req.body.smartphoneID,
+                    creationDate: req.body.creationDate,
+                    votes: req.body.votes,
+                },
+                newComment = await new Comment(commentDB).save(),
+                commentJSON = newComment.toJSON();
 
             res.status(201).json(commentJSON);
 
@@ -35,13 +36,12 @@ router.route('/comments')
         }
     })
 
-router.route('/comments/:id')
+router.route('/:id/comments/:id')
     .get(async(req, res) => {
         try {
-            let commentsList = req.app.get('comments')
-            let searchId = req.params.id
-
-            let foundComment = await Comment.findById({ _id: searchId }).exec()
+            let commentsList = req.app.get('comments'),
+                searchId = req.params.id,
+                foundComment = await Comment.findById({ _id: searchId }).exec();
 
             if (!foundComment) {
                 res.status(404).json({ 'message': 'El elemento que intentas obtener no existe' })
@@ -56,15 +56,9 @@ router.route('/comments/:id')
     })
     .put(mustAuth(), async(req, res) => {
         try {
-            let searchId = req.params.id
-
-            let commentUpdated = {
-                title: req.body.title,
-                body: req.body.body,
-                votes: req.body.votes
-            }
-
-            let updateComment = await Comment.findByIdAndUpdate(searchId, commentUpdated)
+            let searchId = req.params.id,
+                commentUpdated = { votes: req.body.votes },
+                updateComment = await Comment.findOneAndUpdate(searchId, commentUpdated, { new: true })
 
             if (!updateComment) {
                 res.status(404).json({ 'message': 'El elemento que intentas editar no existe' })
@@ -77,16 +71,14 @@ router.route('/comments/:id')
     })
     .delete(mustAuth(), async(req, res) => {
         try {
-            let searchId = req.params.id
-            let deleteComment = await Comment.deleteOne({ _id: searchId })
+            let searchId = req.params.id,
+                deleteComment = await Comment.deleteOne({ _id: searchId });
 
             if (deleteComment.deleteCount === 0) {
                 res.status(404).json({ 'message': 'El elemento que intentas eliminar no existe' })
                 return
             }
-
-            res.status(204).json({ 'message': 'El usuario se ha eliminado correctamente.' })
-            return
+            res.status(204).json(`El comentario con id ${searchId} se ha eliminado correctamente.`)
         } catch (err) {
             res.status(500).json({ 'message': 'No se ha podido resolver la solicitud' })
         }
