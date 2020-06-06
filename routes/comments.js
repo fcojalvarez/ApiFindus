@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Comment = require('../models/comments');
 const bearerToken = require('express-bearer-token');
-const config = require('../config.js');
 const app = express();
 const { json } = require('express');
 const mustAuth = require('../middlewares/mustAuth')
@@ -10,7 +9,7 @@ const mustAuth = require('../middlewares/mustAuth')
 app.use(json());
 app.use(bearerToken());
 
-router.route('/:id/comments')
+router.route('/:idMobile/comments')
     .get(async(req, res) => {
         let commentsList = await Comment.find().exec();
 
@@ -36,11 +35,10 @@ router.route('/:id/comments')
         }
     })
 
-router.route('/:id/comments/:id')
+router.route('/:idMobile/comments/:id')
     .get(async(req, res) => {
         try {
-            let commentsList = req.app.get('comments'),
-                searchId = req.params.id,
+            let searchId = req.params.id,
                 foundComment = await Comment.findById({ _id: searchId }).exec();
 
             if (!foundComment) {
@@ -55,10 +53,10 @@ router.route('/:id/comments/:id')
         }
     })
     .put(mustAuth(), async(req, res) => {
+
         try {
-            let searchId = req.params.id,
-                commentUpdated = { votes: req.body.votes },
-                updateComment = await Comment.findOneAndUpdate(searchId, commentUpdated, { new: true })
+            let searchId = req.params.id
+            let updateComment = await Comment.findOneAndUpdate(searchId, req.body, { returnOriginal: false })
 
             if (!updateComment) {
                 res.status(404).json({ 'message': 'El elemento que intentas editar no existe' })
@@ -68,6 +66,7 @@ router.route('/:id/comments/:id')
         } catch (err) {
             res.status(500).json({ 'message': 'No se ha podido resolver la solicitud' })
         }
+
     })
     .delete(mustAuth(), async(req, res) => {
         try {
