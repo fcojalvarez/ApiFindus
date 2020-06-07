@@ -5,11 +5,12 @@ const bearerToken = require('express-bearer-token');
 const app = express();
 const { json } = require('express');
 const mustAuth = require('../middlewares/mustAuth')
+const onlyAdmins = require('../middlewares/onlyAdmins')
 
 app.use(json());
 app.use(bearerToken());
 
-router.route('/:idMobile/comments')
+router.route('/:idDevice/comments')
     .get(async(req, res) => {
         let commentsList = await Comment.find().exec();
 
@@ -35,7 +36,7 @@ router.route('/:idMobile/comments')
         }
     })
 
-router.route('/:idMobile/comments/:id')
+router.route('/:idDevice/comments/:id')
     .get(async(req, res) => {
         try {
             let searchId = req.params.id,
@@ -68,7 +69,7 @@ router.route('/:idMobile/comments/:id')
         }
 
     })
-    .delete(mustAuth(), async(req, res) => {
+    .delete(onlyAdmins(), async(req, res) => {
         try {
             let searchId = req.params.id,
                 deleteComment = await Comment.deleteOne({ _id: searchId });

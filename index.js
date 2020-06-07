@@ -26,6 +26,9 @@ app.use(comentsRoute)
 app.get("/", (req, res) => {
     res.send('Hola mundo')
 })
+app.get('/login', (req, res) => {
+    res.send('login')
+})
 
 async function conectDatabase() {
     let db = mongoose.connections;

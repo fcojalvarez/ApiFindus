@@ -6,6 +6,8 @@ const firebase = require('firebase')
 const config = require('../config.js');
 const app = express();
 const { json } = require('express');
+const onlyAdmins = require('../middlewares/onlyAdmins')
+const musthAuth = require('../middlewares/mustAuth')
 
 app.use(json());
 app.use(bearerToken());
@@ -13,7 +15,7 @@ app.use(bearerToken());
 firebase.initializeApp(config.firebaseConfig)
 
 router.route('/users')
-    .get(async(req, res) => {
+    .get(onlyAdmins(), async(req, res) => {
         let usersList = await User.find().exec();
 
         res.json(usersList);
@@ -45,7 +47,7 @@ router.route('/users')
     })
 
 router.route('/users/:id')
-    .get(async(req, res) => {
+    .get(onlyAdmins(), async(req, res) => {
         try {
             let userList = req.app.get('users')
             let searchId = req.params.id
@@ -63,7 +65,7 @@ router.route('/users/:id')
             return
         }
     })
-    .put(async(req, res) => {
+    .put(onlyAdmins(), async(req, res) => {
         try {
             let searchId = req.params.id
 
@@ -86,7 +88,7 @@ router.route('/users/:id')
             res.status(500).json({ 'message': 'No se ha podido resolver la solicitud' })
         }
     })
-    .delete(async(req, res) => {
+    .delete(onlyAdmins(), async(req, res) => {
         try {
             let searchId = req.params.id
             let deleteUser = await User.deleteOne({ _id: searchId })

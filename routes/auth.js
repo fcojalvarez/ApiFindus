@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const firebase = require('firebase');
 const config = require('../config.js');
 
-router.route('/login')
+router.route('/auth/login')
     .post(async(req, res) => {
         try {
             let auth = await firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password)
