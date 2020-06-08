@@ -36,13 +36,12 @@ async function conectDatabase() {
         await mongoose.connect(config.mongoConfig, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            useFindAndModify: false
+            useFindAndModify: true
         })
 
     } catch (err) {
         console.log(`
             No ha sido posible conectar con la base de datos.
-            Message: ${err}
         `)
     }
 }

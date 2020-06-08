@@ -10,20 +10,20 @@ const onlyAdmins = require('../middlewares/onlyAdmins')
 app.use(json());
 app.use(bearerToken());
 
-router.route('/:idDevice/comments')
+router.route('/:deviceID/comments')
     .get(async(req, res) => {
         let commentsList = await Comment.find().exec();
 
         res.json(commentsList);
     })
-    .post(mustAuth(), async(req, res) => {
+    .post( /* mustAuth() ,*/ async(req, res) => {
         try {
             let commentDB = {
                     body: req.body.body,
                     userCreate: req.body.userCreate,
                     smartphoneID: req.body.smartphoneID,
                     creationDate: req.body.creationDate,
-                    votes: req.body.votes,
+                    votes: req.body.votes
                 },
                 newComment = await new Comment(commentDB).save(),
                 commentJSON = newComment.toJSON();
@@ -36,7 +36,7 @@ router.route('/:idDevice/comments')
         }
     })
 
-router.route('/:idDevice/comments/:id')
+router.route('/:deviceID/comments/:id')
     .get(async(req, res) => {
         try {
             let searchId = req.params.id,
@@ -55,17 +55,20 @@ router.route('/:idDevice/comments/:id')
     })
     .put(mustAuth(), async(req, res) => {
 
+        let commentEdited = req.body.votes + 1
+
         try {
             let searchId = req.params.id
-            let updateComment = await Comment.findOneAndUpdate(searchId, req.body, { returnOriginal: false })
+            let updateComment = await Comment.FindAndModify(searchId, commentEdited, { new: true })
 
-            if (!updateComment) {
+            if (!result) {
                 res.status(404).json({ 'message': 'El elemento que intentas editar no existe' })
                 return
             }
-            res.json(updateComment)
+
+            res.json(result)
         } catch (err) {
-            res.status(500).json({ 'message': 'No se ha podido resolver la solicitud' })
+            res.status(500).json({ 'message': ' No se ha podido resolver la solicitud' })
         }
 
     })

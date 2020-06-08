@@ -12,7 +12,6 @@ function onlyAdmins() {
             let token = req.token;
             let user = jwt.verify(token, JWT_PASSWORD);
             req.user = user;
-            console.log(user)
         } catch (err) {
             res.status(401).json({ message: "Token inválido" });
             return;
