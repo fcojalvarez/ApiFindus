@@ -36,7 +36,7 @@ async function conectDatabase() {
         await mongoose.connect(config.mongoConfig, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            useFindAndModify: true
+            useFindAndModify: false
         })
 
     } catch (err) {

@@ -72,7 +72,7 @@ router.route('/users/:id')
 
             let userEdited = req.body
 
-            let updateUser = await User.findOneAndUpdate(searchId, req.body, { new: true })
+            let updateUser = await User.findByIdAndUpdate(searchId, req.body, { new: true })
 
             if (!updateUser) {
                 res.status(404).json({ 'message': 'El elemento que intentas editar no existe' })

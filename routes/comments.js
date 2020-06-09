@@ -55,22 +55,19 @@ router.route('/:deviceID/comments/:id')
     })
     .put(mustAuth(), async(req, res) => {
 
-        let commentEdited = req.body.votes + 1
-
         try {
             let searchId = req.params.id
-            let updateComment = await Comment.FindAndModify(searchId, commentEdited, { new: true })
+            let updateComment = await Comment.findByIdAndUpdate(searchId, req.body, { new: true })
 
-            if (!result) {
+            if (!updateComment) {
                 res.status(404).json({ 'message': 'El elemento que intentas editar no existe' })
                 return
             }
 
-            res.json(result)
+            res.json(updateComment)
         } catch (err) {
-            res.status(500).json({ 'message': ' No se ha podido resolver la solicitud' })
+            res.status(500).json(err + { 'message': ' No se ha podido resolver la solicitud' })
         }
-
     })
     .delete(onlyAdmins(), async(req, res) => {
         try {
