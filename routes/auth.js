@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/users');
 const jwt = require("jsonwebtoken");
-const firebase = require('firebase');
+const firebase = require('firebase')
 const config = require('../config.js');
 
 

@@ -18,16 +18,15 @@ app.use(bearerToken())
 const usersRoute = require('./routes/users')
 const LoginRoute = require('./routes/auth')
 const comentsRoute = require('./routes/comments')
+const devicesRoute = require('./routes/devices')
     // Enganchamos la ruta
 app.use(usersRoute)
 app.use(LoginRoute)
 app.use(comentsRoute)
+app.use(devicesRoute)
 
 app.get("/", (req, res) => {
     res.send('Hola mundo')
-})
-app.get('/login', (req, res) => {
-    res.send('login')
 })
 
 async function conectDatabase() {

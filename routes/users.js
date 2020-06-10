@@ -15,7 +15,7 @@ app.use(bearerToken());
 firebase.initializeApp(config.firebaseConfig)
 
 router.route('/users')
-    .get( /* onlyAdmins(), */ async(req, res) => {
+    .get(onlyAdmins(), async(req, res) => {
         let usersList = await User.find().exec();
 
         res.json(usersList);
@@ -65,25 +65,29 @@ router.route('/users/:id')
             return
         }
     })
-    .put( /* onlyAdmins(), */ async(req, res) => {
-
+    .put(musthAuth(), async(req, res) => {
         try {
             let searchId = req.params.id
 
             let userEdited = req.body
 
-            let updateUser = await User.findByIdAndUpdate(searchId, req.body, { new: true })
+            let updateUser = await User.findByIdAndUpdate(searchId, userEdited, { new: true })
 
             if (!updateUser) {
                 res.status(404).json({ 'message': 'El elemento que intentas editar no existe' })
                 return
             }
+
+            if (searchId !== userEdited._id || userEdited.profile !== 'admin') {
+                return
+            }
+
             res.json(updateUser)
         } catch (err) {
             res.status(500).json({ 'message': 'No se ha podido resolver la solicitudddd' })
         }
     })
-    .delete(onlyAdmins(), async(req, res) => {
+    .delete(musthAuth(), async(req, res) => {
         try {
             let searchId = req.params.id
             let deleteUser = await User.deleteOne({ _id: searchId })

@@ -10,13 +10,36 @@ const onlyAdmins = require('../middlewares/onlyAdmins')
 app.use(json());
 app.use(bearerToken());
 
+router.route('/comments')
+    .get(onlyAdmins(), async(req, res) => {
+        let commentsList = await Comment.find().exec();
+
+        res.json(commentsList);
+    })
+
+router.route('/comments/:id')
+    .delete(onlyAdmins(), async(req, res) => {
+        try {
+            let searchId = req.params.id,
+                deleteComment = await Comment.deleteOne({ _id: searchId });
+
+            if (deleteComment.deleteCount === 0) {
+                res.status(404).json({ 'message': 'El elemento que intentas eliminar no existe' })
+                return
+            }
+            res.status(204).json(`El comentario con id ${searchId} se ha eliminado correctamente.`)
+        } catch (err) {
+            res.status(500).json({ 'message': 'No se ha podido resolver la solicitud' })
+        }
+    })
+
 router.route('/:deviceID/comments')
     .get(async(req, res) => {
         let commentsList = await Comment.find().exec();
 
         res.json(commentsList);
     })
-    .post( /* mustAuth() ,*/ async(req, res) => {
+    .post(mustAuth(), async(req, res) => {
         try {
             let commentDB = {
                     body: req.body.body,
