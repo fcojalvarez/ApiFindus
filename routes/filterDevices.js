@@ -12,40 +12,46 @@ router.route('/filterDevices')
     .post(async(req, res) => {
         try {
             let devicesList = await Device.find().exec();
-            console.log(req.body)
-
             let dataForm = {
-                almacenamiento: req.body.almacenamiento,
-                camaraFrontal: req.body.camaraFrontal,
-                camaraTrasera: req.body.camaraTrasera,
-                memoriaRam: req.body.memoriaRam,
-                pantalla: req.body.pantalla,
-                precio: req.body.precio,
-                sistemaOperativo: req.body.sistemaOperativo
+                storage: req.body.storage,
+                frontCamera: req.body.frontCamera,
+                leadCamera: req.body.leadCamera,
+                ram: req.body.ram,
+                rom: req.body.rom,
+                display: req.body.display,
+                price: req.body.price,
+                so: req.body.so
             }
-
-            // Filtro rango precio
-            devicesList = devicesList.filter(device => device.price < dataForm.precio)
-
-            // Filtro Sistema Operativo
-            if (dataForm.sistemaOperativo === 'Android') {
+            let priceToNumber = parseInt(dataForm.price)
+                // Filtro rango precio
+            devicesList = devicesList.filter(device => parseInt(device.price) < priceToNumber)
+                // Filtro Sistema Operativo
+            if (dataForm.so === 'Android') {
                 devicesList = devicesList.filter(device => device.os[0].split(' ')[0] === 'Android')
-            } else if (dataForm.sistemaOperativo === 'IOS') {
-                devicesList = devicesList.filter(device => device.os[0].split(' ')[0] === 'iOS')
+            } else if (dataForm.so === 'iOS') {
+                devicesList = devicesList.filter(device => device.os[0].split(' ')[0] == 'iOS')
             }
-
             // Filtro tamaño pantalla
-            if (dataForm.pantalla === "Menos de 6''") {
+            if (dataForm.display === "Menos de 6''") {
                 devicesList = devicesList.filter(device => device.display[1] < 6)
-            } else if (dataForm.pantalla === "Más de 6''") {
+            } else if (dataForm.display === "Más de 6''") {
                 devicesList = devicesList.filter(device => device.display[1] >= 6)
             }
+            // Filtro memoria RAM
+            if (dataForm.ram === 'Más de 8GB') {
+                devicesList = devicesList.filter(element => Math.min(...element.ram) >= 8 || Math.max(...element.ram) >= 8)
+            } else if (dataForm.ram === 'Menos de 8GB') {
+                devicesList = devicesList.filter(element => Math.min(...element.ram) < 8 || Math.max(...element.ram) < 8)
+            }
+            // Filtro almacenamiento
+            if (dataForm.rom === 'Más de 128GB') {
+                devicesList = devicesList.filter(element => Math.min(...element.rom) >= 128 || Math.max(...element.rom) >= 128)
+            } else if (dataForm.rom === 'Menos de 128GB') {
+                devicesList = devicesList.filter(element => Math.min(...element.rom) < 128 || Math.max(...element.rom) < 128)
+            }
 
-            // Filtro memoria RAM (NO PUEDO ACCEDER A STORAGE)
 
-            // Filtro almacenamiento (NO PUEDO ACCEDER A STORAGE)
-
-
+            devicesList = devicesList.slice(0, 3)
 
             res.json(devicesList);
         } catch (err) {

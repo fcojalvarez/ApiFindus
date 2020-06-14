@@ -20,13 +20,17 @@ const LoginRoute = require('./routes/auth')
 const comentsRoute = require('./routes/comments')
 const devicesRoute = require('./routes/devices')
 const filterDevicesRoute = require('./routes/filterDevices')
-    // Enganchamos la ruta
+const devicesAleatoryRoute = require('./routes/devicesAleatory')
+const contactRoute = require('./routes/messages')
+
+// Enganchamos la ruta
 app.use(usersRoute)
 app.use(LoginRoute)
 app.use(comentsRoute)
 app.use(devicesRoute)
 app.use(filterDevicesRoute)
-
+app.use(devicesAleatoryRoute)
+app.use(contactRoute)
 
 app.get("/", (req, res) => {
     res.send('Hola mundo')
