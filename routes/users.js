@@ -32,6 +32,7 @@ router.route('/users')
                 surname: req.body.surname,
                 email: req.body.email,
                 profile: req.body.profile,
+                devicesFavorites: '',
                 _id: auth.user.uid,
             };
 
@@ -82,7 +83,7 @@ router.route('/users/:id')
                 return
             }
 
-            res.json(updateUser)
+            res.status(200).json(updateUser)
         } catch (err) {
             res.status(500).json({ 'message': 'No se ha podido resolver la solicitudddd' })
         }
@@ -106,5 +107,11 @@ router.route('/users/:id')
             res.status(500).json({ 'message': 'No se ha podido resolver la solicitud' })
         }
     })
+
+router.route('/users/:id/favoriteDevices')
+    .get(onlyAdmins(), async(req, res) => {
+        try {} catch (err) {}
+    })
+
 
 module.exports = router

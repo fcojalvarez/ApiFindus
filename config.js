@@ -1,11 +1,9 @@
-// Preguntar, no entiendo que hace.
 let envs = {}
 if (process.env.NODE_ENV !== "production") {
     const dotenv = require("dotenv");
     const result = dotenv.config();
     envs = result.parsed
 }
-// Preguntar, no entiendo que hace.
 
 const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY || envs.FIREBASE_API_KEY,
@@ -19,15 +17,21 @@ const firebaseConfig = {
 
 const mongoConfig = process.env.MONGO_DB_URL || envs.MONGO_DB_URL;
 const jwtKey = process.env.JWT_PASSWORD || envs.JWT_PASSWORD
+const configMailer = {
+    user: process.env.USER_EMAIL || envs.USER_EMAIL,
+    password: process.env.PASSWORD_EMAIL || envs.PASSWORD_EMAIL
+}
 
 const config = {
     firebaseConfig,
     mongoConfig,
-    jwtKey
+    jwtKey,
+    configMailer
 }
 
 exports.firebaseConfig = firebaseConfig
 exports.mongoConfig = mongoConfig
 exports.jwtKey = jwtKey
+exports.configMailer = configMailer
 
 module.exports = config;

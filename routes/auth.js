@@ -32,4 +32,17 @@ router.route('/auth/login')
         }
     })
 
+router.route('/auth/resetPassword')
+    .post(async(req, res) => {
+        try {
+            let auth = firebase.auth()
+            let email = req.body.email
+            let remindPassword = await auth.sendPasswordResetEmail(email)
+            res.status(201).json({ message: 'Se ha enviado un mensaje a su email para restablecer su contraseña' })
+        } catch (e) {
+            res.status(404).json({ 'message': 'No se ha podido realizar su solicitud vuelva a intentarlo' })
+            console.log(e)
+        }
+    })
+
 module.exports = router

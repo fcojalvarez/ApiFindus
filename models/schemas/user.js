@@ -6,6 +6,7 @@ let userSchema = new Schema({
     surname: { type: String, require: true },
     email: { type: String, require: true },
     password: { type: String, require: false },
+    devicesFavorites: { type: Object, require: false },
     profile: { type: String, require: true },
     _id: { type: String, require: true }
 })

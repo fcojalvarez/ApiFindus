@@ -6,6 +6,7 @@ const { json } = require('express');
 const Message = require('../models/messages');
 const nodemailer = require('nodemailer');
 const onlyAdmins = require('../middlewares/onlyAdmins');
+const config = require('../config.js');
 
 app.use(json());
 
@@ -30,8 +31,8 @@ router.route('/contact')
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: /*config.USER_EMAIL*/ 'finduspage@gmail.com',
-                pass: /*config.PASSWORD_EMAIL*/ 'QwErT12345'
+                user: 'finduspage@gmail.com' /* config.configMailer.user */ ,
+                pass: 'QwErT12345' /* config.configMailer.password */
             }
         });
 
@@ -46,7 +47,7 @@ router.route('/contact')
 
         transporter.sendMail(mailOptions, function(err, data) {
             if (err) {
-                console.log('Error: ', err)
+                console.log('Error: ')
             } else {
                 console.log('Email send')
             }
