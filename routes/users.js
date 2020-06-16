@@ -69,9 +69,7 @@ router.route('/users/:id')
     .put(musthAuth(), async(req, res) => {
         try {
             let searchId = req.params.id
-
             let userEdited = req.body
-
             let updateUser = await User.findByIdAndUpdate(searchId, userEdited, { new: true })
 
             if (!updateUser) {
@@ -84,6 +82,7 @@ router.route('/users/:id')
             }
 
             res.status(200).json(updateUser)
+            return
         } catch (err) {
             res.status(500).json({ 'message': 'No se ha podido resolver la solicitudddd' })
         }
@@ -108,9 +107,45 @@ router.route('/users/:id')
         }
     })
 
-router.route('/users/:id/favoriteDevices')
-    .get(onlyAdmins(), async(req, res) => {
-        try {} catch (err) {}
+router.route('/users/:id/addDevicesFavorites')
+    .post(musthAuth(), async(req, res) => {
+        try {
+            let userID = req.params.id
+            let userDB = await User.findById(userID)
+            let devicesFavorites = req.body.deviceID
+
+            userDB.devicesFavorites.push(devicesFavorites)
+
+            userEdited = await User.findByIdAndUpdate(userID, { devicesFavorites: userDB.devicesFavorites }, { new: true })
+
+            res.status(200).json(userEdited)
+        } catch (err) {
+            res.status(404).json('message: ' + err)
+        }
+    })
+
+router.route('/users/:id/delDevicesFavorites')
+    .post(musthAuth(), async(req, res) => {
+        try {
+            let userID = req.params.id
+            let userDB = await User.findById(userID)
+            let devicesFavorites = userDB.devicesFavorites
+            let deviceID = req.body.deviceID
+            let indexArr = devicesFavorites.indexOf(deviceID)
+
+            if (indexArr === -1) {
+                res.status(404).json('El elemento que intentas eliminar no existe.')
+                return
+            }
+
+            userDB.devicesFavorites.splice(indexArr, 1)
+
+            userEdited = await User.findByIdAndUpdate(userID, { devicesFavorites: userDB.devicesFavorites }, { new: true })
+
+            res.status(200).json(userEdited)
+        } catch (err) {
+            res.status(404).json('message: ' + err)
+        }
     })
 
 

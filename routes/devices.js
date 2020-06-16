@@ -4,7 +4,8 @@ const Device = require('../models/devices');
 const bearerToken = require('express-bearer-token');
 const app = express();
 const { json } = require('express');
-const onlyAdmins = require('../middlewares/onlyAdmins')
+const onlyAdmins = require('../middlewares/onlyAdmins');
+const deviceSchema = require('../models/schemas/device');
 
 app.use(json());
 app.use(bearerToken());
@@ -113,14 +114,12 @@ router.route('/devicesFilter')
         try {
             let devicesList = await Device.find().exec();
             let dataForm = {
-                storage: req.body.storage,
-                frontCamera: req.body.frontCamera,
-                leadCamera: req.body.leadCamera,
                 ram: req.body.ram,
                 rom: req.body.rom,
                 display: req.body.display,
                 price: req.body.price,
-                so: req.body.so
+                so: req.body.so,
+                features: req.body.features
             }
             let priceToNumber = parseInt(dataForm.price)
                 // Filtro rango precio
@@ -151,6 +150,27 @@ router.route('/devicesFilter')
             }
 
             // Filtro Características
+            if (dataForm.features.includes('Sensor de huella')) {
+                devicesList = devicesList.filter(device => device.features.Fingerprint !== undefined)
+            }
+            if (dataForm.features.includes('Desbloqueo facial')) {
+                devicesList = devicesList.filter(device => device.features.faceUnlock !== undefined)
+            }
+            if (dataForm.features.includes('Carga inalámbrica')) {
+                devicesList = devicesList.filter(device => device.features.wirelessCharging !== undefined)
+            }
+            if (dataForm.features.includes('Carga rápida')) {
+                devicesList = devicesList.filter(device => device.features.fastCharging !== undefined)
+            }
+            if (dataForm.features.includes('Radio FM')) {
+                devicesList = devicesList.filter(device => device.features.radio !== undefined)
+            }
+            if (dataForm.features.includes('Dual SIM')) {
+                devicesList = devicesList.filter(device => device.features.sim.includes('Dual SIM'))
+            }
+            if (dataForm.features.includes('Jack 3.5mm')) {
+                cdevicesList = devicesList.filter(device => device.features._3_5mm_jack_ !== undefined)
+            }
 
             devicesList = devicesList.slice(0, 3)
 
