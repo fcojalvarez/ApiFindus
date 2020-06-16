@@ -1,17 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const bearerToken = require('express-bearer-token');
 const app = express();
 const { json } = require('express');
 const Message = require('../models/messages');
 const nodemailer = require('nodemailer');
-const onlyAdmins = require('../middlewares/onlyAdmins');
+const mustAuth = require('../middlewares/onlyAdmins');
 const config = require('../config.js');
 
 app.use(json());
 
 router.route('/contact')
-    .get(onlyAdmins(), async(req, res) => {
+    .get(mustAuth(), async(req, res) => {
         let messageList = await Message.find().exec();
 
         res.json(messageList);

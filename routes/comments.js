@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Comment = require('../models/comments');
-const Device = require('../models/devices');
 const bearerToken = require('express-bearer-token');
 const app = express();
 const { json } = require('express');
@@ -19,7 +18,7 @@ router.route('/comments')
     })
 
 router.route('/comments/:id')
-    .delete(onlyAdmins(), async(req, res) => {
+    .delete(mustAuth(), async(req, res) => {
         try {
             let searchId = req.params.id,
                 deleteComment = await Comment.deleteOne({ _id: searchId });

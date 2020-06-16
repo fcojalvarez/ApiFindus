@@ -4,7 +4,7 @@ const Device = require('../models/devices');
 const bearerToken = require('express-bearer-token');
 const app = express();
 const { json } = require('express');
-const onlyAdmins = require('../middlewares/onlyAdmins');
+const mustAuth = require('../middlewares/onlyAdmins');
 const deviceSchema = require('../models/schemas/device');
 
 app.use(json());
@@ -19,7 +19,7 @@ router.route('/devices')
             console.log(err)
         }
     })
-    .post(onlyAdmins(), async(req, res) => {
+    .post(mustAuth(), async(req, res) => {
         try {
             let foundDevice = req.body
             let addNewDevice = await new Device(foundDevice).save()
@@ -35,8 +35,8 @@ router.route('/devices')
 router.route('/devices/:id')
     .get(async(req, res) => {
         try {
-            let searchId = req.params.id
-            let foundDevice = await Device.findById({ _id: searchId }).exec()
+            let searchID = req.params.id
+            let foundDevice = await Device.findById({ _id: searchID })
 
             if (!foundDevice) {
                 res.status(404).json(foundDevice + { 'message': 'El elemento que intentas obtener no existe' })
@@ -49,7 +49,7 @@ router.route('/devices/:id')
             return
         }
     })
-    .put(onlyAdmins(), async(req, res) => {
+    .put(mustAuth(), async(req, res) => {
         try {
             let searchId = req.params.id
             let updateDevice = await Device.findByIdAndUpdate(searchId, req.body, { new: true })
@@ -64,7 +64,7 @@ router.route('/devices/:id')
             res.status(500).json(err + { 'message': ' No se ha podido resolver la solicitud' })
         }
     })
-    .delete(onlyAdmins(), async(req, res) => {
+    .delete(mustAuth(), async(req, res) => {
         try {
             let searchId = req.params.id,
                 deleteDevice = await Device.deleteOne({ _id: searchId });
