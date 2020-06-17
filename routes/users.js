@@ -91,14 +91,12 @@ router.route('/users/:id')
         try {
             let searchId = req.params.id
             let deleteUser = await User.deleteOne({ _id: searchId })
-            let user = firebase.auth().currentUser.delete();
+            firebase.auth().currentUser.delete();
 
             if (deleteUser.deleteCount === 0) {
                 res.status(404).json({ 'message': 'El elemento que intentas eliminar no existe' })
                 return
             }
-
-            /* user.delete() */
 
             res.status(204).json({ 'message': 'El usuario se ha eliminado correctamente.' })
             return

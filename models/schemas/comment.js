@@ -7,6 +7,9 @@ let commentSchema = new Schema({
     userCreateID: { type: String, required: true },
     smartphoneID: { type: String, require: true },
     creationDate: { type: String, require: true },
+    usersVotes: [
+        { type: String, require: true }
+    ],
     votes: { type: Number, require: true }
 })
 
