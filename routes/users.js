@@ -162,5 +162,4 @@ router.route('/users/:id/delDevicesFavorites')
         }
     })
 
-
 module.exports = router
