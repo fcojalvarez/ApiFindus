@@ -13,7 +13,7 @@ router.route('/contact')
     .get(mustAuth(), async(req, res) => {
         let messageList = await Message.find().exec();
 
-        res.json(messageList);
+        res.status(200).json(messageList);
     })
     .post(async(req, res) => {
         const { fullName, email, message } = req.body;
@@ -41,7 +41,7 @@ router.route('/contact')
             subject: 'Formulario de contacto desde Findus Page',
             text: `
             ${message}
-            ` /* contentEmail */
+            `
         }
 
         transporter.sendMail(mailOptions, function(err, data) {
@@ -52,7 +52,7 @@ router.route('/contact')
             }
         })
 
-        res.send(contentEmail)
+        res.status(200).send(contentEmail)
     })
 
 module.exports = router

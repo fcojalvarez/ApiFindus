@@ -14,9 +14,9 @@ router.route('/devices')
     .get(async(req, res) => {
         try {
             let devicesList = await Device.find().exec();
-            res.json(devicesList);
+            res.status(200).json(devicesList);
         } catch (err) {
-            console.log(err)
+            res.status(404).json({ message: e.message })
         }
     })
     .post(mustAuth(), async(req, res) => {
@@ -37,13 +37,11 @@ router.route('/devices/:id')
         try {
             let searchID = req.params.id
             let foundDevice = await Device.findById({ _id: searchID })
-
             if (!foundDevice) {
                 res.status(404).json(foundDevice + { 'message': 'El elemento que intentas obtener no existe' })
                 return
             }
-
-            res.json(foundDevice)
+            res.status(200).json(foundDevice)
         } catch (err) {
             res.status(404).json(err + { message: e.message })
             return
@@ -59,7 +57,7 @@ router.route('/devices/:id')
                 return
             }
 
-            res.json(updateDevice)
+            res.status(200).json(updateDevice)
         } catch (err) {
             res.status(500).json(err + { 'message': ' No se ha podido resolver la solicitud' })
         }
@@ -103,7 +101,7 @@ router.route('/devicesAleatory')
                 devicesList[numbersAleatory[2]]
             )
 
-            res.json(devicesAleatory);
+            res.status(200).json(devicesAleatory);
         } catch (err) {
             res.status(404).json(err)
         }
@@ -174,7 +172,7 @@ router.route('/devicesFilter')
 
             devicesList = devicesList.slice(0, 3)
 
-            res.json(devicesList);
+            res.status(200).json(devicesList);
         } catch (err) {
             res.status(404).json({ message: err.message })
         }

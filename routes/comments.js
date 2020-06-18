@@ -13,8 +13,7 @@ app.use(bearerToken());
 router.route('/comments')
     .get(async(req, res) => {
         let commentsList = await Comment.find().exec();
-
-        res.json(commentsList);
+        res.status(200).json(commentsList);
     })
 
 router.route('/comments/:id')
@@ -36,8 +35,7 @@ router.route('/comments/:id')
 router.route('/:deviceID/comments')
     .get(async(req, res) => {
         let commentsList = await Comment.find().exec();
-
-        res.json(commentsList);
+        res.status(200).json(commentsList);
     })
     .post(mustAuth(), async(req, res) => {
         try {
@@ -71,7 +69,7 @@ router.route('/:deviceID/comments/:id')
                 return
             }
 
-            res.json(foundComment)
+            res.status(200).json(foundComment)
         } catch (err) {
             res.status(404).json({ message: e.message })
             return
@@ -88,7 +86,7 @@ router.route('/:deviceID/comments/:id')
                 return
             }
 
-            res.json(updateComment)
+            res.status(200).json(updateComment)
         } catch (err) {
             res.status(500).json(err + { 'message': ' No se ha podido resolver la solicitud' })
         }

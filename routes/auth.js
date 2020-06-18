@@ -25,7 +25,7 @@ router.route('/auth/login')
                 res.status(500).json({ 'message': 'No ha sido posible iniciar sesión con el usuario. Inténtalo más tarde' })
                 return
             }
-            res.json({ 'token': token })
+            res.status(200).json({ 'token': token })
         } catch (e) {
             res.status(401).json({ message: e.message });
             return
@@ -41,7 +41,6 @@ router.route('/auth/resetPassword')
             res.status(201).json({ message: 'Se ha enviado un mensaje a su email para restablecer su contraseña' })
         } catch (e) {
             res.status(404).json({ 'message': 'No se ha podido realizar su solicitud vuelva a intentarlo' })
-            console.log(e)
         }
     })
 

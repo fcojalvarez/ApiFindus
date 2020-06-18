@@ -17,8 +17,7 @@ firebase.initializeApp(config.firebaseConfig)
 router.route('/users')
     .get(musthAuth(), async(req, res) => {
         let usersList = await User.find().exec();
-
-        res.json(usersList);
+        res.status(200).json(usersList);
     })
     .post(async(req, res) => {
         try {
@@ -60,7 +59,7 @@ router.route('/users/:id')
                 return
             }
 
-            res.json(foundUser)
+            res.status(200).json(foundUser)
         } catch (err) {
             res.status(404).json({ message: e.message })
             return
