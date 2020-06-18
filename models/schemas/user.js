@@ -10,7 +10,8 @@ let userSchema = new Schema({
         { type: String, require: false }
     ],
     profile: { type: String, require: true },
-    _id: { type: String, require: true }
+    _id: { type: String, require: true },
+    image: { type: String, require: true },
 })
 
 module.exports = userSchema

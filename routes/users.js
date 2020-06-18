@@ -33,6 +33,7 @@ router.route('/users')
                 profile: req.body.profile,
                 devicesFavorites: [],
                 _id: auth.user.uid,
+                image: req.body.image
             };
 
             let newUser = await new User(userDB).save()
@@ -71,6 +72,8 @@ router.route('/users/:id')
             let userEdited = req.body
             let updateUser = await User.findByIdAndUpdate(searchId, userEdited, { new: true })
 
+            let userEdit = firebase.auth().currentUser.updateEmail(req.body.email);
+            console.log('aaa' + userEdit)
             if (!updateUser) {
                 res.status(404).json({ 'message': 'El elemento que intentas editar no existe' })
                 return
@@ -83,7 +86,7 @@ router.route('/users/:id')
             res.status(200).json(updateUser)
             return
         } catch (err) {
-            res.status(500).json({ 'message': 'No se ha podido resolver la solicitudddd' })
+            res.status(500).json({ 'message': 'No se ha podido resolver la solicitud' })
         }
     })
     .delete(musthAuth(), async(req, res) => {
