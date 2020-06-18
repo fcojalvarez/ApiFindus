@@ -7,7 +7,6 @@ function onlyAdmins() {
             res.status(401).json({ message: "Necesitas un token JWT" });
             return;
         }
-
         try {
             let token = req.token;
             let user = jwt.verify(token, JWT_PASSWORD);
