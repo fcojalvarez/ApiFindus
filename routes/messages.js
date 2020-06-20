@@ -32,7 +32,7 @@ router.route('/contact')
             auth: {
                 user: 'finduspage@gmail.com',
                 /* config.configMailer.user, */
-                pass: 'QwErT1234' /* config.configMailer.password */
+                pass: 'QwErT12345' /* config.configMailer.password */
             }
         });
 
