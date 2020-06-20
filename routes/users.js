@@ -131,6 +131,11 @@ router.route('/users/:id/addDevicesFavorites')
             let userDB = await User.findById(userID)
             let devicesFavorites = req.body.deviceID
 
+            if (userDB.devicesFavorites.includes(devicesFavorites)) {
+                res.status(200).json('duplicate')
+                return
+            }
+
             userDB.devicesFavorites.push(devicesFavorites)
 
             userEdited = await User.findByIdAndUpdate(userID, { devicesFavorites: userDB.devicesFavorites }, { new: true })
