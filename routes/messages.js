@@ -30,25 +30,35 @@ router.route('/contact')
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'finduspage@gmail.com' /* config.configMailer.user */ ,
+                user: 'finduspage@gmail.com',
+                /* config.configMailer.user, */
                 pass: 'QwErT12345' /* config.configMailer.password */
             }
         });
 
         let mailOptions = {
-            from: 'fcojalvarezrodriguez@gmail.com',
+            from: req.body.email,
             to: 'fcojalvarezrodriguez@gmail.com',
             subject: 'Formulario de contacto desde Findus Page',
-            text: `
-            ${message}
-            `
+            html: `
+            <br>
+            <h1 style="background: #ddd; padding: 20px"><b>${req.body.subject}</b></h1>
+            <p>Escrito por: ${req.body.fullName}</p>
+            <hr>
+            <h2><b>Mensaje:</b></h2>
+            <p>${req.body.message}</p>
+            <hr>
+            Mensaje enviado desde: ${req.body.email} 
+        `
         }
 
         transporter.sendMail(mailOptions, function(err, data) {
             if (err) {
-                console.log('Error: ')
+                console.log('error' + err)
+                    /* res.end(500, err.message) */
             } else {
-                console.log('Email send')
+                console.log('send')
+                    /* res.status(200).jsonp(req.body); */
             }
         })
 
