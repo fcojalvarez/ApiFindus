@@ -32,7 +32,7 @@ router.route('/contact')
             auth: {
                 user: 'finduspage@gmail.com',
                 /* config.configMailer.user, */
-                pass: 'QwErT12345' /* config.configMailer.password */
+                pass: 'QwErT1234' /* config.configMailer.password */
             }
         });
 
@@ -42,7 +42,7 @@ router.route('/contact')
             subject: 'Formulario de contacto desde Findus Page',
             html: `
             <br>
-            <h1 style="background: #ddd; padding: 20px"><b>${req.body.subject}</b></h1>
+            <h1 style="background: #545c64; padding: 20px"><b style="color: #FFEC6B">${req.body.subject}</b></h1>
             <p>Escrito por: ${req.body.fullName}</p>
             <hr>
             <h2><b>Mensaje:</b></h2>
@@ -52,17 +52,13 @@ router.route('/contact')
         `
         }
 
-        transporter.sendMail(mailOptions, function(err, data) {
+        transporter.sendMail(mailOptions, (err) => {
             if (err) {
-                console.log('error' + err)
-                    /* res.end(500, err.message) */
+                res.status(500).json('message: ' + err)
             } else {
-                console.log('send')
-                    /* res.status(200).jsonp(req.body); */
+                res.status(200).send(contentEmail)
             }
         })
-
-        res.status(200).send(contentEmail)
     })
 
 module.exports = router
