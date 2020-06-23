@@ -11,8 +11,7 @@ app.use(json());
 
 router.route('/contact')
     .get(mustAuth(), async(req, res) => {
-        let messageList = await Message.find().exec();
-
+        const messageList = await Message.find().exec();
         res.status(200).json(messageList);
     })
     .post(async(req, res) => {
@@ -30,9 +29,8 @@ router.route('/contact')
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'finduspage@gmail.com',
-                /* config.configMailer.user, */
-                pass: 'QwErT1234' /* config.configMailer.password */
+                user: config.configMailer.user,
+                pass: config.configMailer.password
             }
         });
 

@@ -9,17 +9,15 @@ const config = require('../config.js');
 router.route('/auth/login')
     .post(async(req, res) => {
         try {
-            let auth = await firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password)
-
-            let userDB = await User.findById(auth.user.uid).exec()
-
-            let payload = {
+            const auth = await firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password)
+            const userDB = await User.findById(auth.user.uid).exec()
+            const payload = {
                 id: auth.user.uid,
                 profile: userDB.profile,
                 name: userDB.name,
                 email: userDB.email
             };
-            let token = jwt.sign(payload, config.jwtKey)
+            const token = jwt.sign(payload, config.jwtKey)
 
             if (!token) {
                 res.status(500).json({ 'message': 'No ha sido posible iniciar sesión con el usuario. Inténtalo más tarde' })
@@ -35,9 +33,9 @@ router.route('/auth/login')
 router.route('/auth/resetPassword')
     .post(async(req, res) => {
         try {
-            let auth = firebase.auth()
-            let email = req.body.email
-            let remindPassword = await auth.sendPasswordResetEmail(email)
+            const auth = firebase.auth()
+            const email = req.body.email
+            await auth.sendPasswordResetEmail(email)
             res.status(201).json({ message: 'Se ha enviado un mensaje a su email para restablecer su contraseña' })
         } catch (e) {
             res.status(404).json({ 'message': 'No se ha podido realizar su solicitud vuelva a intentarlo' })

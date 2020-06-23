@@ -12,15 +12,15 @@ app.use(bearerToken());
 
 router.route('/comments')
     .get(async(req, res) => {
-        let commentsList = await Comment.find().exec();
+        const commentsList = await Comment.find().exec();
         res.status(200).json(commentsList);
     })
 
 router.route('/comments/:id')
     .delete(mustAuth(), async(req, res) => {
         try {
-            let searchId = req.params.id,
-                deleteComment = await Comment.deleteOne({ _id: searchId });
+            const searchId = req.params.id
+            const deleteComment = await Comment.deleteOne({ _id: searchId });
 
             if (deleteComment.deleteCount === 0) {
                 res.status(404).json({ 'message': 'El elemento que intentas eliminar no existe' })
@@ -34,12 +34,12 @@ router.route('/comments/:id')
 
 router.route('/:deviceID/comments')
     .get(async(req, res) => {
-        let commentsList = await Comment.find().exec();
+        const commentsList = await Comment.find().exec();
         res.status(200).json(commentsList);
     })
     .post(mustAuth(), async(req, res) => {
         try {
-            let commentDB = {
+            const commentDB = {
                 body: req.body.body,
                 userCreate: req.body.userCreate,
                 userCreateID: req.body.userCreateID,
@@ -48,8 +48,8 @@ router.route('/:deviceID/comments')
                 votes: req.body.votes
             }
 
-            let newComment = await new Comment(commentDB).save()
-            let commentJSON = newComment.toJSON()
+            const newComment = await new Comment(commentDB).save()
+            const commentJSON = newComment.toJSON()
 
             res.status(201).json(commentJSON);
         } catch (e) {
@@ -61,8 +61,8 @@ router.route('/:deviceID/comments')
 router.route('/:deviceID/comments/:id')
     .get(async(req, res) => {
         try {
-            let searchId = req.params.id
-            let foundComment = await Comment.findById({ _id: searchId }).exec()
+            const searchId = req.params.id
+            const foundComment = await Comment.findById({ _id: searchId }).exec()
 
             if (!foundComment) {
                 res.status(404).json({ 'message': 'El elemento que intentas obtener no existe' })
@@ -76,10 +76,9 @@ router.route('/:deviceID/comments/:id')
         }
     })
     .put(mustAuth(), async(req, res) => {
-
         try {
-            let searchId = req.params.id
-            let updateComment = await Comment.findByIdAndUpdate(searchId, req.body, { new: true })
+            const searchId = req.params.id
+            const updateComment = await Comment.findByIdAndUpdate(searchId, req.body, { new: true })
 
             if (!updateComment) {
                 res.status(404).json({ 'message': 'El elemento que intentas editar no existe' })
@@ -93,8 +92,8 @@ router.route('/:deviceID/comments/:id')
     })
     .delete(onlyAdmins(), async(req, res) => {
         try {
-            let searchId = req.params.id,
-                deleteComment = await Comment.deleteOne({ _id: searchId });
+            const searchId = req.params.id
+            const deleteComment = await Comment.deleteOne({ _id: searchId });
 
             if (deleteComment.deleteCount === 0) {
                 res.status(404).json({ 'message': 'El elemento que intentas eliminar no existe' })

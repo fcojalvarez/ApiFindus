@@ -5,7 +5,6 @@ const bearerToken = require('express-bearer-token');
 const app = express();
 const { json } = require('express');
 const mustAuth = require('../middlewares/onlyAdmins');
-const deviceSchema = require('../models/schemas/device');
 
 app.use(json());
 app.use(bearerToken());
@@ -13,7 +12,7 @@ app.use(bearerToken());
 router.route('/devices')
     .get(async(req, res) => {
         try {
-            let devicesList = await Device.find().exec();
+            const devicesList = await Device.find().exec();
             res.status(200).json(devicesList);
         } catch (err) {
             res.status(404).json({ message: e.message })
@@ -21,9 +20,9 @@ router.route('/devices')
     })
     .post(mustAuth(), async(req, res) => {
         try {
-            let foundDevice = req.body
-            let addNewDevice = await new Device(foundDevice).save()
-            let deviceJSON = addNewDevice.toJSON()
+            const foundDevice = req.body
+            const addNewDevice = await new Device(foundDevice).save()
+            const deviceJSON = addNewDevice.toJSON()
 
             res.status(201).json(deviceJSON);
         } catch (e) {
@@ -35,8 +34,8 @@ router.route('/devices')
 router.route('/devices/:id')
     .get(async(req, res) => {
         try {
-            let searchID = req.params.id
-            let foundDevice = await Device.findById({ _id: searchID })
+            const searchID = req.params.id
+            const foundDevice = await Device.findById({ _id: searchID })
             if (!foundDevice) {
                 res.status(404).json(foundDevice + { 'message': 'El elemento que intentas obtener no existe' })
                 return
@@ -49,8 +48,8 @@ router.route('/devices/:id')
     })
     .put(mustAuth(), async(req, res) => {
         try {
-            let searchId = req.params.id
-            let updateDevice = await Device.findByIdAndUpdate(searchId, req.body, { new: true })
+            const searchId = req.params.id
+            const updateDevice = await Device.findByIdAndUpdate(searchId, req.body, { new: true })
 
             if (!updateDevice) {
                 res.status(404).json(updateDevice + { 'message': 'El elemento que intentas editar no existe' })
@@ -64,8 +63,8 @@ router.route('/devices/:id')
     })
     .delete(mustAuth(), async(req, res) => {
         try {
-            let searchId = req.params.id,
-                deleteDevice = await Device.deleteOne({ _id: searchId });
+            const searchId = req.params.id
+            const deleteDevice = await Device.deleteOne({ _id: searchId });
 
             if (deleteDevice.deleteCount === 0) {
                 res.status(404).json({ 'message': 'El elemento que intentas eliminar no existe' })
@@ -111,7 +110,7 @@ router.route('/devicesFilter')
     .post(async(req, res) => {
         try {
             let devicesList = await Device.find().exec();
-            let dataForm = {
+            const dataForm = {
                 ram: req.body.ram,
                 rom: req.body.rom,
                 display: req.body.display,
