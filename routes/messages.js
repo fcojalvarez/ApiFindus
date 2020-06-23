@@ -29,14 +29,8 @@ router.route('/contact')
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-<<<<<<< HEAD
-                user: 'finduspage@gmail.com',
-                /* config.configMailer.user, */
-                pass: 'QwErT12345' /* config.configMailer.password */
-=======
                 user: config.configMailer.user,
-                pass: config.configMailer.password
->>>>>>> develop
+                pass: config.configMailer.password,
             }
         });
 
