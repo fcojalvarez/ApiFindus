@@ -39,7 +39,9 @@ router.route('/:deviceID/comments')
     })
     .post(mustAuth(), async(req, res) => {
         try {
+
             const commentDB = {
+                image: req.body.image,
                 body: req.body.body,
                 userCreate: req.body.userCreate,
                 userCreateID: req.body.userCreateID,
@@ -47,10 +49,8 @@ router.route('/:deviceID/comments')
                 creationDate: req.body.creationDate,
                 votes: req.body.votes
             }
-
             const newComment = await new Comment(commentDB).save()
             const commentJSON = newComment.toJSON()
-
             res.status(201).json(commentJSON);
         } catch (e) {
             res.status(404).json({ message: e.message })

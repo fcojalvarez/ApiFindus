@@ -10,12 +10,13 @@ router.route('/auth/login')
     .post(async(req, res) => {
         try {
             const auth = await firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password)
-            const userDB = await User.findById(auth.user.uid).exec()
-            const payload = {
+            let userDB = await User.findById(auth.user.uid).exec()
+            let payload = {
                 id: auth.user.uid,
                 profile: userDB.profile,
                 name: userDB.name,
-                email: userDB.email
+                email: userDB.email,
+                image: userDB.image,
             };
             const token = jwt.sign(payload, config.jwtKey)
 

@@ -16,7 +16,7 @@ firebase.initializeApp(config.firebaseConfig)
 
 router.route('/users')
     .get(musthAuth(), async(req, res) => {
-        let usersList = await User.find().exec();
+        const usersList = await User.find().exec();
         res.status(200).json(usersList);
     })
     .post(async(req, res) => {
@@ -50,10 +50,8 @@ router.route('/users')
 router.route('/users/:id')
     .get(musthAuth(), async(req, res) => {
         try {
-            let userList = req.app.get('users')
-            let searchId = req.params.id
-
-            let foundUser = await User.findById({ _id: searchId }).exec()
+            const searchId = req.params.id
+            const foundUser = await User.findById({ _id: searchId }).exec()
 
             if (!foundUser) {
                 res.status(404).json({ 'message': 'El elemento que intentas obtener no existe' })
