@@ -127,9 +127,9 @@ router.route('/users/:id/getDevicesFavorites')
 router.route('/users/:id/addDevicesFavorites')
     .post(musthAuth(), async(req, res) => {
         try {
-            let userID = req.params.id
+            const userID = req.params.id
             let userDB = await User.findById(userID)
-            let devicesFavorites = req.body.deviceID
+            const devicesFavorites = req.body.deviceID
 
             if (userDB.devicesFavorites.includes(devicesFavorites)) {
                 res.status(200).json('duplicate')
@@ -138,7 +138,7 @@ router.route('/users/:id/addDevicesFavorites')
 
             userDB.devicesFavorites.push(devicesFavorites)
 
-            userEdited = await User.findByIdAndUpdate(userID, { devicesFavorites: userDB.devicesFavorites }, { new: true })
+            const userEdited = await User.findByIdAndUpdate(userID, { devicesFavorites: userDB.devicesFavorites }, { new: true })
 
             res.status(200).json(userEdited)
         } catch (err) {
@@ -149,7 +149,7 @@ router.route('/users/:id/addDevicesFavorites')
 router.route('/users/:id/delDevicesFavorites')
     .post(musthAuth(), async(req, res) => {
         try {
-            let userID = req.params.id
+            const userID = req.params.id
             let userDB = await User.findById(userID)
             let devicesFavorites = userDB.devicesFavorites
             let deviceID = req.body.deviceID
