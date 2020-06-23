@@ -123,9 +123,9 @@ router.route('/devicesFilter')
             devicesList = devicesList.filter(device => parseInt(device.price) < priceToNumber)
                 // Filtro Sistema Operativo
             if (dataForm.so === 'Android') {
-                devicesList = devicesList.filter(device => device.os[0].split(' ')[0] === 'Android')
-            } else if (dataForm.so === 'iOS') {
-                devicesList = devicesList.filter(device => device.os[0].split(' ')[0] == 'iOS')
+                devicesList = devicesList.filter(device => device.os[0].includes('Android'))
+            } else if (dataForm.so === 'IOS') {
+                devicesList = devicesList.filter(device => device.os[0].includes('iOS'))
             }
             // Filtro tamaño pantalla
             if (dataForm.display === "Menos de 6''") {
