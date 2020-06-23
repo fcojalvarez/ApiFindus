@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 let commentSchema = new Schema({
+    image: { type: String, require: true },
     body: { type: String, require: true },
     userCreate: { type: String, require: true },
     userCreateID: { type: String, required: true },
