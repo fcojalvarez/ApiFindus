@@ -35,9 +35,6 @@ router.route('/comments/:id')
 router.route('/:deviceID/comments')
     .get(async(req, res) => {
         const commentsList = await Comment.find().exec();
-
-        commentsList.sort((a, b) => a.creationDate > b.creationDate)
-
         res.status(200).json(commentsList);
     })
     .post(mustAuth(), async(req, res) => {
