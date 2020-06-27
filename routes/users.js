@@ -15,7 +15,7 @@ app.use(bearerToken());
 firebase.initializeApp(config.firebaseConfig)
 
 router.route('/users')
-    .get(musthAuth(), async(req, res) => {
+    .get(async(req, res) => {
         const usersList = await User.find().exec();
         res.status(200).json(usersList);
     })

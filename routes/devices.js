@@ -145,7 +145,6 @@ router.route('/devicesFilter')
             } else if (dataForm.rom === 'Menos de 128GB') {
                 devicesList = devicesList.filter(element => Math.min(...element.rom) < 128 || Math.max(...element.rom) < 128)
             }
-
             // Filtro Características
             if (dataForm.features.includes('Sensor de huella')) {
                 devicesList = devicesList.filter(device => device.features.Fingerprint !== undefined)
