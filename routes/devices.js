@@ -111,23 +111,23 @@ router.route('/devicesFilter')
         try {
             let devicesList = await Device.find().exec();
             const dataForm = {
-                ram: req.body.ram,
-                rom: req.body.rom,
-                display: req.body.display,
-                price: req.body.price,
-                so: req.body.so,
-                features: req.body.features
-            }
-            let priceToNumber = parseInt(dataForm.price)
-                // Filtro rango precio
-            devicesList = devicesList.filter(device => parseInt(device.price) < priceToNumber)
+                    ram: req.body.ram,
+                    rom: req.body.rom,
+                    display: req.body.display,
+                    price: req.body.price,
+                    so: req.body.so,
+                    features: req.body.features
+                }
                 // Filtro Sistema Operativo
             if (dataForm.so === 'Android') {
                 devicesList = devicesList.filter(device => device.os[0].includes('Android'))
             } else if (dataForm.so === 'IOS') {
                 devicesList = devicesList.filter(device => device.os[0].includes('iOS'))
             }
-            // Filtro tamaño pantalla
+            // Filtro rango precio
+            let priceToNumber = parseInt(dataForm.price)
+            devicesList = devicesList.filter(device => parseInt(device.price) < priceToNumber)
+                // Filtro tamaño pantalla
             if (dataForm.display === "Menos de 6''") {
                 devicesList = devicesList.filter(device => device.display[1] < 6)
             } else if (dataForm.display === "Más de 6''") {
