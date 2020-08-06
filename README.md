@@ -1,4 +1,4 @@
-# Findus
+# Findus API
 
 > Find your smartphone.
 
@@ -26,14 +26,15 @@ With a simple questionnaire, you can determine your needs and recommend a smartp
 #### Technologies used
 
 <ul>
-  <li>NUXT</li>
-  <li>VUEX</li>
-  <li>AXIOS</li>
-  <li>JWT</li>
-  <li>Element</li>
+  <li>NodeJS</li>
+  <li>Express</li>
+  <li>Cors</li>
+  <li>DotEnv</li>
+  <li>Express-Bearer-Token</li>
   <li>Firebase (login only)</li>
-  <li>MomentJS</li>
-  <li>vue-cookie-law</li>
+  <li>Mongoose</li>
+  <li>MongoDB</li>
+  <li>nodemailer</li>
 </ul>
 
 
