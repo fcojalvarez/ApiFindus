@@ -27,15 +27,18 @@ router.route('/contact')
         `;
 
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            pool: true,
+            host: "petplus.xyz",
+            port: 465,
+            secure: true,
             auth: {
                 user: config.configMailer.user,
-                pass: config.configMailer.password,
+                pass: config.configMailer.password
             }
         });
 
         let mailOptions = {
-            from: req.body.email,
+            from: "noreply@petplus.app",
             to: 'fcojalvarezrodriguez@gmail.com',
             subject: 'Formulario de contacto desde Findus Page',
             html: `
@@ -52,9 +55,9 @@ router.route('/contact')
 
         transporter.sendMail(mailOptions, (err) => {
             if (err) {
-                res.status(500).json('message: ' + err)
+                res.status(500)
             } else {
-                res.status(200).send(contentEmail)
+                res.status(200)
             }
         })
     })
